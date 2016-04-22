@@ -1,25 +1,34 @@
-local function run(msg, matches)
-	if matches[1] == 'bc' and is_admin(msg) then
-		local response = matches[3]
-		send_large_msg("chat#id"..matches[2], response)
-	end
-	if matches[1] == 'broadcast' then
-		if is_sudo(msg) then -- Only sudo !
-			local data = load_data(_config.moderation.data)
-			local groups = 'groups'
-			local response = matches[2]
-			for k,v in pairs(data[tostring(groups)]) do
-				chat_id =  v
-				local receiver = 'chat#id'..chat_id
-				send_large_msg(receiver, response)
-			end
-		end
-	end
+local function returnids(cb_extra, success, result)
+   local receiver = cb_extra.receiver
+   local chat_id = result.id
+   local chatname = result.print_name
+   for k,v in pairs(result.members) do
+      send_large_msg(v.print_name, text)
+   end
+   send_large_msg(receiver, 'Message broadcasted succesfully')
 end
+
+local function run(msg, matches)
+   local receiver = get_receiver(msg)
+   if not is_chat_msg(msg) then
+      return 'Broadcast only works on group'
+   end
+   if matches[1] then
+      text = 'Message for all member of ' .. string.gsub(msg.to.print_name, '_', ' ') .. ' :'
+      text = text .. '\n\n' .. matches[1]
+      local chat = get_receiver(msg)
+      chat_info(chat, returnids, {receiver=receiver})
+   end
+end
+
 return {
-  patterns = {
-    "^[!/](broadcast) +(.+)$",
-    "^[!/](bc) (%d+) (.*)$"
-  },
-  run = run
+   description = "Broadcast message to all group participant.",
+   usage = {
+      "!broadcast <message to broadcast>",
+   },
+   patterns = {
+      "^!broadcast +(.+)$"
+   },
+   run = run,
+   moderated = true
 }
