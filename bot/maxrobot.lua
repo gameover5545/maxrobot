@@ -229,7 +229,7 @@ function create_config( )
     sudo_users = {182209675},--Sudo users
     disabled_channels = {},
     moderation = {data = 'data/moderation.json'},
-    about_text = [[Teleseed v2 - Open Source
+    about_text = [[maxrobot v1 - Open Source
 An advance Administration bot based on yagop/telegram-bot 
 
 https://github.com/gameover5545/maxrobot
